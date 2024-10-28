@@ -122,8 +122,8 @@ jobs:
         shell: bash
         run: |
           if [ -f ~/.ssh/id_ed25519 ]; then chmod 600 ~/.ssh/id_ed25519; fi
-          echo '${{ secrets.DOCS_THEME_SSH_PRIVATE_KEY}}' > ~/.ssh/id_ed25519 && chmod 400 ~/.ssh/id_ed25519
-          git clone git@github.com:${{ github.repository_owner }}/docs-theme.git $TEMP_DIR/landing-page/docs/theme
+          echo '${{ secrets.THEME_SSH_PRIVATE_KEY}}' > ~/.ssh/id_ed25519 && chmod 400 ~/.ssh/id_ed25519
+          git clone git@github.com:${{ github.repository_owner }}/theme.git $TEMP_DIR/landing-page/docs/theme
           docker run --rm -v $TEMP_DIR/landing-page:/docs ${{ secrets.MKDOCS_REPO_NAME }} build -c -d site/
           mkdir -p $TEMP_DIR/build/
           cp -a $TEMP_DIR/landing-page/site $TEMP_DIR/build/
