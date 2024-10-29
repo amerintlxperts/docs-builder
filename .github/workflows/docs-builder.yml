@@ -116,6 +116,7 @@ jobs:
       - name: Link mkdocs.yml
         shell: bash
         run: |
+          echo 'site_name: "Hands on Labs"' > $TEMP_DIR/landing-page/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' > $TEMP_DIR/landing-page/mkdocs.yml
 
       - name: Clone Theme
