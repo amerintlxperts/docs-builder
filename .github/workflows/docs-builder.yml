@@ -263,7 +263,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f
         with:
-          branch: "version-${{ env.new_versionn }}"
+          branch: "version-${{ env.new_version }}"
           commit-message: "Increment version to ${{ env.new_version }}"
           title: "Increment version to ${{ env.new_version }}"
           body: "This PR increments the version to ${{ env.new_version }}."
