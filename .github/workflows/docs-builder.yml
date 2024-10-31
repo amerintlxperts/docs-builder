@@ -37,7 +37,14 @@ jobs:
           then
             if [[ "${{ secrets.DEPLOYED }}" == "true" ]]
             then
-              echo 'action=build' >> "${GITHUB_OUTPUT}"
+              if [[ -n "${{ secrets.ACR_LOGIN_SERVER }}" ]] && dig "${{ secrets.ACR_LOGIN_SERVER }}" +short > /dev/null 2>&1
+              then
+                echo 'action=build' >> "${GITHUB_OUTPUT}"
+              else
+                echo 'action=skip' >> "${GITHUB_OUTPUT}"
+                echo "Error: ACR_LOGIN_SERVER is not a valid or resolvable DNS entry" >&2
+                exit 1
+              fi 
             fi
           else
             echo 'action=skip' >> "${GITHUB_OUTPUT}"
