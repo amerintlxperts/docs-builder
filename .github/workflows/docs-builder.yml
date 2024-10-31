@@ -223,7 +223,7 @@ jobs:
         with:
           context: ${{ github.workspace }}
           push: true
-          tags: ${{ secrets.ACR_LOGIN_SERVER }}/docs:${{ needs.increment-version.outputs.new_version }},${{ secrets.ACR_LOGIN_SERVER }}/docs:latest
+          tags: ${{ secrets.ACR_LOGIN_SERVER }}/docs:${{ env.image_version }},${{ secrets.ACR_LOGIN_SERVER }}/docs:latest
 
   update-version-branch:
     name: Update Version Branch
@@ -249,20 +249,20 @@ jobs:
 
       - name: Update VERSION File
         run: |
-          echo "${{ needs.increment-version.outputs.new_version }}" > VERSION
+          echo "${{ env.new_version }}" > VERSION
 
       - name: Commit Changes
         run: |
           git add VERSION
-          git commit -m "Increment version to ${{ needs.increment-version.outputs.new_version }}"
+          git commit -m "Increment version to ${{ env.new_version }}"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f
         with:
           branch: version
-          commit-message: "Increment version to ${{ needs.increment-version.outputs.new_version }}"
-          title: "Increment version to ${{ needs.increment-version.outputs.new_version }}"
-          body: "This PR increments the version to ${{ needs.increment-version.outputs.new_version }}."
+          commit-message: "Increment version to ${{ env.new_version }}"
+          title: "Increment version to ${{ env.new_version }}"
+          body: "This PR increments the version to ${{ env.new_version }}."
           base: version
 
       - name: Enable Pull Request AutoMerge
@@ -292,5 +292,5 @@ jobs:
               "name": "docs",
               "file": "Deployment.yaml",
               "spec": ".spec.template.spec.containers[0].image",
-              "value": "${{ secrets.ACR_LOGIN_SERVER }}/docs:${{ needs.increment-version.outputs.new_version }}"
+              "value": "${{ secrets.ACR_LOGIN_SERVER }}/docs:${{ env.new_version }}"
             }
