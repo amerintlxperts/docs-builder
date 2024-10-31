@@ -80,7 +80,7 @@ jobs:
 
   build:
     name: Build and Push Container
-    if: needs.init.outputs.action == 'build'
+    if: success()
     runs-on: ubuntu-latest
     needs: [increment-version, init]
     steps:
@@ -202,7 +202,7 @@ jobs:
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/references/mkdocs.yml
           docker run --rm -v $TEMP_DIR/src/references:/docs ${{ secrets.MKDOCS_REPO_NAME }} build -d site/
           mv $TEMP_DIR/src/references/site $TEMP_DIR/build/site/references
-      
+
       - name: Copy Workdir to TEMP_DIR
         run: |
           cp -a $GITHUB_WORKSPACE/* $TEMP_DIR/build
@@ -210,7 +210,7 @@ jobs:
       - name: Create htaccess password
         run: |
           htpasswd -b -c $TEMP_DIR/build/.htpasswd ${{ secrets.DOCS_USERNAME }} ${{ secrets.HTPASSWD }}
-  
+
       - name: Build and Push Docker Image
         uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75
         with:
@@ -221,7 +221,6 @@ jobs:
   update-version-branch:
     name: Update Version Branch
     needs: [init, increment-version, build]
-    if: needs.init.outputs.action == 'build'
     runs-on: ubuntu-latest
     if: success()
     steps:
@@ -288,4 +287,3 @@ jobs:
               "spec": ".spec.template.spec.containers[0].image",
               "value": "${{ secrets.ACR_LOGIN_SERVER }}/docs:${{ needs.increment-version.outputs.new_version }}"
             }
-
