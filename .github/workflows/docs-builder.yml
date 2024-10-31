@@ -81,8 +81,9 @@ jobs:
           else
             NEW_VERSION="0.0.1"
           fi
+          echo "$NEW_VERSION"
           echo "$NEW_VERSION" > VERSION
-          echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
   build:
     name: Build and Push Container
