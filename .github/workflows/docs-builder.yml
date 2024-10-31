@@ -264,6 +264,7 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f
+        id: create_pr
         with:
           branch: "version-${{ env.new_version }}"
           commit-message: "Increment version to ${{ env.new_version }}"
@@ -272,12 +273,13 @@ jobs:
           base: version
 
       - name: Enable Pull Request AutoMerge
+        if: steps.create_pr.outputs.pull-request-operation == 'created'
         uses: peter-evans/enable-pull-request-automerge@a660677d5469627102a1c1e11409dd063606628d
         env:
           GH_TOKEN: ${{ secrets.PAT }}
         with:
           token: ${{ secrets.PAT }}
-          pull-request-number: ${{ steps.create-pull-request.outputs.pull-request-number }}
+          pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
           merge-method: squash
 
   dispatch-manifest-update:
