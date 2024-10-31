@@ -1,4 +1,3 @@
----
 name: "docs-builder"
 
 on:
@@ -44,7 +43,7 @@ jobs:
                 echo 'action=skip' >> "${GITHUB_OUTPUT}"
                 echo "Error: ACR_LOGIN_SERVER is not a valid or resolvable DNS entry" >&2
                 exit 1
-              fi 
+              fi
             fi
           else
             echo 'action=skip' >> "${GITHUB_OUTPUT}"
@@ -90,6 +89,8 @@ jobs:
     if: success()
     runs-on: ubuntu-latest
     needs: [increment-version, init]
+    env:
+      new_version: ${{ needs.increment-version.outputs.new_version }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
@@ -223,13 +224,15 @@ jobs:
         with:
           context: ${{ github.workspace }}
           push: true
-          tags: ${{ secrets.ACR_LOGIN_SERVER }}/docs:${{ env.image_version }},${{ secrets.ACR_LOGIN_SERVER }}/docs:latest
+          tags: ${{ secrets.ACR_LOGIN_SERVER }}/docs:${{ env.new_version }},${{ secrets.ACR_LOGIN_SERVER }}/docs:latest
 
   update-version-branch:
     name: Update Version Branch
     needs: [init, increment-version, build]
     runs-on: ubuntu-latest
     if: success()
+    env:
+      new_version: ${{ needs.increment-version.outputs.new_version }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
@@ -279,6 +282,8 @@ jobs:
     needs: [init, increment-version, build, update-version-branch]
     runs-on: ubuntu-latest
     if: success()
+    env:
+      new_version: ${{ needs.increment-version.outputs.new_version }}
     steps:
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0
