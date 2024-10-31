@@ -249,7 +249,7 @@ jobs:
           git fetch origin
           if git show-ref --quiet refs/heads/version; then
             git checkout version
-            git pull origin version
+            git pull --rebase origin version
           else
             git checkout -b version
           fi
