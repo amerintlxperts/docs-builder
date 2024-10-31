@@ -247,9 +247,8 @@ jobs:
       - name: Fetch Version Branch or Create It
         run: |
           git fetch origin
-          if git show-ref --quiet refs/heads/version; then
-            git checkout version
-            git pull --rebase origin version
+          if git show-ref --quiet refs/remotes/origin/version; then
+            git checkout -B version origin/version
           else
             git checkout -b version
           fi
@@ -258,11 +257,15 @@ jobs:
         run: |
           echo "${{ env.new_version }}" > VERSION
 
-      - name: Commit and Push
+      - name: Commit and Push Changes
         run: |
           git add VERSION
-          git commit -m "Increment version to ${{ env.new_version }}"
-          git push origin version
+          if git diff-index --quiet HEAD --; then
+            echo "No changes to commit"
+          else
+            git commit -m "Increment version to ${{ env.new_version }}"
+            git push -u origin version --force-with-lease  # Force push but only if remote hasn't changed
+          fi
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f
