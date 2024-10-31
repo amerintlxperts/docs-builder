@@ -76,11 +76,10 @@ jobs:
             NEW_VERSION="0.0.1"
           fi
           echo "$NEW_VERSION" > VERSION
-          echo "::set-output name=new_version::$NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> $GITHUB_ENV
 
   build:
-    name: Build and Manage Version
+    name: Build and Push Container
     if: needs.init.outputs.action == 'build'
     runs-on: ubuntu-latest
     needs: [increment-version, init]
