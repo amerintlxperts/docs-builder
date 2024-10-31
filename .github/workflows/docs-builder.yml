@@ -80,7 +80,7 @@ jobs:
           password: ${{ secrets.ARM_CLIENT_SECRET }}
 
       - name: Check if VERSION file exists
-        id: set_version
+        id: version
         run: |
           # Check if VERSION file exists
           if [ -f VERSION ]; then
@@ -100,7 +100,7 @@ jobs:
           echo "latest_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Check if repository exists and get latest tag
-        id: get_latest_tag
+        id: tag
         run: |
           REPO_NAME="docs"
           ACR_NAME=${{ secrets.ACR_LOGIN_SERVER }}
@@ -128,11 +128,11 @@ jobs:
           echo "latest_tag=$NEW_TAG" >> $GITHUB_OUTPUT
 
       - name: Compare latest tag to version
-        id: new_version
+        id: set_version
         run: |
           # Parse latest_version and latest_tag
-          LATEST_VERSION="${{ steps.set_version.outputs.latest_version }}"
-          LATEST_TAG="${{ steps.get_latest_tag.outputs.latest_tag }}"
+          LATEST_VERSION="${{ steps.version.outputs.latest_version }}"
+          LATEST_TAG="${{ steps.tag.outputs.latest_tag }}"
 
           # Function to compare two semantic versions
           version_greater_or_equal() {
