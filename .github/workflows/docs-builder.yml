@@ -81,7 +81,6 @@ jobs:
           else
             NEW_VERSION="0.0.1"
           fi
-          echo "$NEW_VERSION"
           echo "$NEW_VERSION" > VERSION
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
@@ -115,6 +114,7 @@ jobs:
       - name: setup ssh config
         shell: bash
         run: |
+          echo "${{ env.new_version }}"
           mkdir -p ~/.ssh
           cat << EOF > ~/.ssh/config
           Host xxx
