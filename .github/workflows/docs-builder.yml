@@ -66,7 +66,20 @@ jobs:
           git fetch origin version || git checkout -b version
           git checkout version || git checkout -b version
 
-      - name: Increment VERSION File
+      - name: Microsoft Azure Authentication
+        uses: azure/login@a65d910e8af852a8061c627c456678983e180302
+        with:
+          allow-no-subscriptions: true
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: ACR login
+        uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c
+        with:
+          login-server: "${{ secrets.ACR_LOGIN_SERVER }}"
+          username: ${{ secrets.ARM_CLIENT_ID }}
+          password: ${{ secrets.ARM_CLIENT_SECRET }}
+
+      - name: Check if VERSION file exists
         id: set_version
         run: |
           # Check if VERSION file exists
@@ -77,13 +90,78 @@ jobs:
               exit 1
             fi
             IFS='.' read -r major minor patch <<< "$VERSION"
+            LATEST_VERSION="${major}.${minor}.${patch}"
             ((patch++))
             NEW_VERSION="${major}.${minor}.${patch}"
           else
-            NEW_VERSION="0.0.1"
+            LATEST_VERSION="0.0.0"
+            NEW_VERSION="0.0.0"
           fi
-          echo "$NEW_VERSION" > VERSION
-          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if repository exists and get latest tag
+        id: get_latest_tag
+        run: |
+          REPO_NAME="docs"
+          ACR_NAME=${{ secrets.ACR_LOGIN_SERVER }}
+
+          # Check if the repository exists
+          REPO_EXISTS=$(az acr repository list --name "$ACR_NAME" --output tsv | grep -w "$REPO_NAME" || true)
+          if [ -z "$REPO_EXISTS" ]; then
+            echo "Repository $REPO_NAME does not exist."
+            exit 1
+          fi
+
+          # Get the most recent tag excluding 'latest'
+          LATEST_TAG=$(az acr repository show-tags --name "$ACR_NAME" --repository "$REPO_NAME" --orderby time_desc --output tsv | grep -v '^latest$' | head -n 1)
+          if [ -z "$LATEST_TAG" ]; then
+            echo "No existing tags found, defaulting to 0.0.0"
+            LATEST_TAG="0.0.0"
+          fi
+
+          # Increment version (assuming semantic versioning)
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST_TAG"
+          NEW_PATCH=$((PATCH + 1))
+          NEW_TAG="$MAJOR.$MINOR.$NEW_PATCH"
+
+          # Set output for next steps
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Compare latest tag to version
+        id: new_version
+        run: |
+          # Parse latest_version and latest_tag
+          LATEST_VERSION="${{ steps.set_version.outputs.latest_version }}"
+          LATEST_TAG="${{ steps.get_latest_tag.outputs.latest_tag }}"
+
+          # Function to compare two semantic versions
+          version_greater_or_equal() {
+            # Returns 0 if version1 >= version2, otherwise returns 1
+            [ "$1" = "$2" ] && return 0
+            local IFS=.
+            local i version1=($1) version2=($2)
+            for ((i=0; i<${#version1[@]}; i++)); do
+              if [[ -z "${version2[i]}" ]]; then
+                version2[i]=0
+              fi
+              if ((10#${version1[i]} > 10#${version2[i]})); then
+                return 0
+              elif ((10#${version1[i]} < 10#${version2[i]})); then
+                return 1
+              fi
+            done
+            return 0
+          }
+
+          # Determine which version is greater
+          if version_greater_or_equal "$LATEST_VERSION" "$LATEST_TAG"; then
+            FINAL_VERSION="$LATEST_VERSION"
+          else
+            FINAL_VERSION="$LATEST_TAG"
+          fi
+
+          # Set the new version output
+          echo "new_version=$FINAL_VERSION" >> $GITHUB_OUTPUT
 
   build:
     name: Build and Push Container
