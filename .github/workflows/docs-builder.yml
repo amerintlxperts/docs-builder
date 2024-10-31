@@ -21,8 +21,31 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+
+  init:
+    name: Job Init
+    runs-on: ubuntu-latest
+    outputs:
+      action: ${{ steps.terraform.outputs.action }}
+    steps:
+      - id: init
+        name: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          if [[ -n "${{ secrets.DEPLOYED }}" ]]
+          then
+            if [[ "${{ secrets.DEPLOYED }}" == "true" ]]
+            then
+              echo 'action=build' >> "${GITHUB_OUTPUT}"
+            fi
+          else
+            echo 'action=skip' >> "${GITHUB_OUTPUT}"
+          fi
+
   increment-version:
     name: Increment Version
+    if: needs.init.outputs.action == 'build'
+    needs: [init]
     runs-on: ubuntu-latest
     outputs:
       new_version: ${{ steps.set_version.outputs.new_version }}
@@ -30,15 +53,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
 
-      - name: Setup Git Configuration
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Fetch Version Branch
-        run: |
-          git fetch origin version:version || git checkout -b version
-          git checkout version
+    - name: Fetch Version Branch
+      run: |
+        git fetch origin version || git checkout -b version
+        git checkout version || git checkout -b version
 
       - name: Increment VERSION File
         id: set_version
@@ -121,17 +139,37 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Fetch Version Branch
+     - name: Fetch Version Branch or Create It
         run: |
           git fetch origin version:version || git checkout -b version
-          git checkout version
+
+      - name: Switch to Version Branch
+        run: |
+          git checkout version || git checkout -b version
 
       - name: Update VERSION File
         run: |
           echo "${{ needs.increment-version.outputs.new_version }}" > VERSION
 
-      - name: Commit and Push Updated VERSION
+      - name: Commit Changes
         run: |
           git add VERSION
           git commit -m "Increment version to ${{ needs.increment-version.outputs.new_version }}"
-          git push origin version
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f
+        with:
+          branch: version
+          commit-message: "Increment version to ${{ needs.increment-version.outputs.new_version }}"
+          title: "Increment version to ${{ needs.increment-version.outputs.new_version }}"
+          body: "This PR increments the version to ${{ needs.increment-version.outputs.new_version }}."
+          base: version
+
+      - name: Enable Pull Request AutoMerge
+        uses: peter-evans/enable-pull-request-automerge@a660677d5469627102a1c1e11409dd063606628d
+        env:
+          GH_TOKEN: ${{ secrets.PAT }}
+        with:
+          token: ${{ secrets.PAT }}
+          pull-request-number: ${{ steps.create-pull-request.outputs.pull-request-number }}
+          merge-method: squash
