@@ -85,10 +85,6 @@ jobs:
           # Check if VERSION file exists
           if [ -f VERSION ]; then
             VERSION=$(cat VERSION)
-            if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              echo "Invalid VERSION format. Exiting."
-              exit 1
-            fi
             IFS='.' read -r major minor patch <<< "$VERSION"
             LATEST_VERSION="${major}.${minor}.${patch}"
             ((patch++))
@@ -104,13 +100,6 @@ jobs:
         run: |
           REPO_NAME="docs"
           ACR_NAME=${{ secrets.ACR_LOGIN_SERVER }}
-
-          # Check if the repository exists
-          REPO_EXISTS=$(az acr repository list --name "$ACR_NAME" --output tsv | grep -w "$REPO_NAME" || true)
-          if [ -z "$REPO_EXISTS" ]; then
-            echo "Repository $REPO_NAME does not exist."
-            exit 1
-          fi
 
           # Get the most recent tag excluding 'latest'
           LATEST_TAG=$(az acr repository show-tags --name "$ACR_NAME" --repository "$REPO_NAME" --orderby time_desc --output tsv | grep -v '^latest$' | head -n 1)
@@ -344,26 +333,6 @@ jobs:
             git commit -m "Increment version to ${{ env.new_version }}"
             git push -u origin version --force-with-lease  # Force push but only if remote hasn't changed
           fi
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f
-        id: create_pr
-        with:
-          branch: "version-${{ env.new_version }}"
-          commit-message: "Increment version to ${{ env.new_version }}"
-          title: "Increment version to ${{ env.new_version }}"
-          body: "This PR increments the version to ${{ env.new_version }}."
-          base: version
-
-      - name: Enable Pull Request AutoMerge
-        if: steps.create_pr.outputs.pull-request-operation == 'created'
-        uses: peter-evans/enable-pull-request-automerge@a660677d5469627102a1c1e11409dd063606628d
-        env:
-          GH_TOKEN: ${{ secrets.PAT }}
-        with:
-          token: ${{ secrets.PAT }}
-          pull-request-number: ${{ steps.create_pr.outputs.pull-request-number }}
-          merge-method: squash
 
   dispatch-manifest-update:
     name: Dispatch Manifest Update
