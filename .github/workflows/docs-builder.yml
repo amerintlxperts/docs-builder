@@ -200,7 +200,7 @@ jobs:
           mkdir $TEMP_DIR/landing-page
           #git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository_owner }}/landing-page $TEMP_DIR/landing-page/docs
           #git clone https://${{ secrets.GITHUB_TOKEN }}:@github.com/${{ github.repository_owner }}/landing-page $TEMP_DIR/landing-page/docs
-          git clone https://:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository_owner }}/landing-page $TEMP_DIR/landing-page/docs
+          git clone https://robinmordasiewicz:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository_owner }}/landing-page $TEMP_DIR/landing-page/docs
 
       - name: Link mkdocs.yml
         shell: bash
