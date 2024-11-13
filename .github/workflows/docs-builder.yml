@@ -196,11 +196,9 @@ jobs:
 
       - name: Clone Landing Page
         shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir $TEMP_DIR/landing-page
-          git clone https://$GITHUB_TOKEN@github.com/${{ github.repository_owner }}/landing-page $TEMP_DIR/landing-page/docs
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository_owner }}/landing-page $TEMP_DIR/landing-page/docs
 
       - name: Link mkdocs.yml
         shell: bash
