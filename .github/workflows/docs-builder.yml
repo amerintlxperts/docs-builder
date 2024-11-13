@@ -200,7 +200,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir $TEMP_DIR/landing-page
-          git clone https://$GITHUB_TOKEN@github.com/${{ github.repository_owner }}/landing-page.git $TEMP_DIR/landing-page/docs
+          git clone https://$GITHUB_TOKEN@github.com/${{ github.repository_owner }}/landing-page $TEMP_DIR/landing-page/docs
 
       - name: Link mkdocs.yml
         shell: bash
