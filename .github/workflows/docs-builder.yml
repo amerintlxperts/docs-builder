@@ -179,7 +179,6 @@ jobs:
       - name: setup ssh config
         shell: bash
         run: |
-          echo "${{ env.new_version }}"
           mkdir -p ~/.ssh
           cat << EOF > ~/.ssh/config
           Host xxx
@@ -197,11 +196,14 @@ jobs:
 
       - name: Clone Landing Page
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ -f ~/.ssh/id_ed25519 ]; then chmod 600 ~/.ssh/id_ed25519; fi
-          echo '${{ secrets.LANDING_PAGE_SSH_PRIVATE_KEY}}' > ~/.ssh/id_ed25519 && chmod 400 ~/.ssh/id_ed25519
+          #if [ -f ~/.ssh/id_ed25519 ]; then chmod 600 ~/.ssh/id_ed25519; fi
+          #echo '${{ secrets.LANDING_PAGE_SSH_PRIVATE_KEY}}' > ~/.ssh/id_ed25519 && chmod 400 ~/.ssh/id_ed25519
           mkdir $TEMP_DIR/landing-page
-          git clone git@github.com:${{ github.repository_owner }}/landing-page.git $TEMP_DIR/landing-page/docs
+          git clone https://$GITHUB_TOKEN@github.com/${{ github.repository_owner }}/landing-page.git $TEMP_DIR/landing-page/docs
+          #git clone git@github.com:${{ github.repository_owner }}/landing-page.git $TEMP_DIR/landing-page/docs
 
       - name: Link mkdocs.yml
         shell: bash
