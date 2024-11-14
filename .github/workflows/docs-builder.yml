@@ -179,7 +179,8 @@ jobs:
       - name: Create Temporary Directory
         id: create-temp-dir
         run: |
-          TEMP_DIR=$(mktemp -d)
+          TEMP_DIR="${RUNNER_TEMP}"
+          mkdir -p "$TEMP_DIR"
           echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
 
       - name: Clone Landing Page
