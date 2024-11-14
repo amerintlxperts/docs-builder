@@ -213,7 +213,8 @@ jobs:
         shell: bash
         run: |
           #chmod -R 777 $TEMP_DIR/landing-page
-          docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/landing-page:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs/docs && mkdocs build -d site/"
+          #docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/landing-page:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs/docs && mkdocs build -d site/"
+          docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/landing-page:/docs ${{ secrets.MKDOCS_REPO_NAME }} build -c -d site/
           cp -a $TEMP_DIR/landing-page/site $TEMP_DIR/build/
 
       - name: Clone cloud
