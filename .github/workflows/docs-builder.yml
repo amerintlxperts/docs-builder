@@ -179,7 +179,7 @@ jobs:
       - name: Create Temporary Directory
         id: create-temp-dir
         run: |
-          TEMP_DIR=`mktemp -d -p "${RUNNER_WORKSPACE}"`
+          TEMP_DIR=$(mktemp -d -p "${RUNNER_WORKSPACE}/docs-builder")
           mkdir -p "$TEMP_DIR"
           echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
           mkdir -p $TEMP_DIR/build/
