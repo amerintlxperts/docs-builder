@@ -182,12 +182,12 @@ jobs:
           TEMP_DIR=$(mktemp -d -p "${RUNNER_WORKSPACE}/docs-builder")
           echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
           mkdir -p $TEMP_DIR
-          chmod -R 777 $TEMP_DIR
           mkdir -p $TEMP_DIR/build/
           mkdir -p $TEMP_DIR/src/cloud
           mkdir -p $TEMP_DIR/src/ot
           mkdir -p $TEMP_DIR/src/secops
           mkdir -p $TEMP_DIR/src/sase
+          chmod -R 777 $TEMP_DIR
 
       - name: Mark TEMP_DIR as a safe Git directory
         run: |
@@ -216,6 +216,7 @@ jobs:
       - name: Build Docs
         shell: bash
         run: |
+          chmod -R 777 $TEMP_DIR/landing-page
           docker run --rm -v $TEMP_DIR/landing-page:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs && mkdocs build -d site/"
           cp -a $TEMP_DIR/landing-page/site $TEMP_DIR/build/
 
