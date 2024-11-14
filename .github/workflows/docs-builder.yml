@@ -189,10 +189,6 @@ jobs:
           mkdir -p $TEMP_DIR/src/sase
           chmod -R 777 $TEMP_DIR
 
-      - name: Mark TEMP_DIR as a safe Git directory
-        run: |
-          git config --global --add safe.directory ${{ env.TEMP_DIR }}
-
       - name: Clone Landing Page
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
         with:
@@ -216,8 +212,8 @@ jobs:
       - name: Build Docs
         shell: bash
         run: |
-          chmod -R 777 $TEMP_DIR/landing-page
-          docker run --rm -v $TEMP_DIR/landing-page:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs/docs && mkdocs build -d site/"
+          #chmod -R 777 $TEMP_DIR/landing-page
+          docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/landing-page:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs/docs && mkdocs build -d site/"
           cp -a $TEMP_DIR/landing-page/site $TEMP_DIR/build/
 
       - name: Clone cloud
