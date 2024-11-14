@@ -215,7 +215,7 @@ jobs:
       - name: Build Docs
         shell: bash
         run: |
-          docker run --rm -v $TEMP_DIR/landing-page:/docs --entrypoint /bin/bash ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs && mkdocs build -d site/"
+          docker run --rm -v $TEMP_DIR/landing-page:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs && mkdocs build -d site/"
           cp -a $TEMP_DIR/landing-page/site $TEMP_DIR/build/
 
       - name: Clone cloud
