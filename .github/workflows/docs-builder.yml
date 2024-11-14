@@ -181,6 +181,7 @@ jobs:
         run: |
           TEMP_DIR=$(mktemp -d -p "${RUNNER_WORKSPACE}/docs-builder")
           mkdir -p "$TEMP_DIR"
+          chmod -R 777 ${{ env.TEMP_DIR }}
           echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
           mkdir -p $TEMP_DIR/build/
           mkdir -p $TEMP_DIR/src/cloud
