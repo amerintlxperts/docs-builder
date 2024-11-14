@@ -290,10 +290,6 @@ jobs:
         run: |
           cp -a $GITHUB_WORKSPACE/Dockerfile $TEMP_DIR/build
 
-      - name: Create htaccess password
-        run: |
-          htpasswd -b -c $TEMP_DIR/build/.htpasswd ${{ secrets.DOCS_USERNAME }} ${{ secrets.HTPASSWD }}
-
       - name: Build and Push Docker Image
         uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75
         with:
