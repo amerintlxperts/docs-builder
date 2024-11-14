@@ -6,9 +6,6 @@ on:
     types: [docs-builder]
   workflow_dispatch:
   push:
-    paths:
-      - "Dockerfile"
-      - "docs.conf"
     branches:
       - "main"
 
@@ -292,7 +289,6 @@ jobs:
       - name: Copy Workdir to TEMP_DIR
         run: |
           cp -a $GITHUB_WORKSPACE/Dockerfile $TEMP_DIR/build
-          cp -a $GITHUB_WORKSPACE/docs.conf $TEMP_DIR/build
 
       - name: Create htaccess password
         run: |
