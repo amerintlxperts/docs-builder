@@ -212,8 +212,6 @@ jobs:
       - name: Build Docs
         shell: bash
         run: |
-          #chmod -R 777 $TEMP_DIR/landing-page
-          #docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/landing-page:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs/docs && mkdocs build -d site/"
           docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/landing-page:/docs ${{ secrets.MKDOCS_REPO_NAME }} build -c -d site/
           cp -a $TEMP_DIR/landing-page/site $TEMP_DIR/build/
 
@@ -260,31 +258,27 @@ jobs:
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/cloud/docs/
           echo 'site_name: "Hands on Labs"' > $TEMP_DIR/src/cloud/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          chmod -R 777 $TEMP_DIR/src/cloud
-          docker run --rm -v $TEMP_DIR/src/cloud:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs/docs && mkdocs build -d site/"
+          docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/cloud:/docs ${{ secrets.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/cloud/site $TEMP_DIR/build/site/cloud
 
           echo '# Hands on Labs' > $TEMP_DIR/src/ot/docs/index.md
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/ot/docs/
           echo 'site_name: "Hands on Labs"' > $TEMP_DIR/src/ot/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/ot/mkdocs.yml
-          chmod -R 777 $TEMP_DIR/src/ot
-          docker run --rm -v $TEMP_DIR/src/ot:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs/docs && mkdocs build -d site/"
+          docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/ot:/docs ${{ secrets.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/ot/site $TEMP_DIR/build/site/ot
 
           echo '# Hands on Labs' > $TEMP_DIR/src/secops/docs/index.md
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/secops/docs/
           echo 'site_name: "Hands on Labs"' > $TEMP_DIR/src/secops/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/secops/mkdocs.yml
-          chmod -R 777 $TEMP_DIR/src/secops
-          docker run --rm -v $TEMP_DIR/src/secops:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs/docs && mkdocs build -d site/"
+          docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/secops:/docs ${{ secrets.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/secops/site $TEMP_DIR/build/site/secops
 
           echo '# Hands on Labs' > $TEMP_DIR/src/sase/docs/index.md
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/sase/docs/
           echo 'site_name: "Hands on Labs"' > $TEMP_DIR/src/sase/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/sase/mkdocs.yml
-          chmod -R 777 $TEMP_DIR/src/sase
           docker run --rm -v $TEMP_DIR/src/sase:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs/docs && mkdocs build -d site/"
           mv $TEMP_DIR/src/sase/site $TEMP_DIR/build/site/sase
 
@@ -292,8 +286,7 @@ jobs:
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/references/docs/
           echo 'site_name: "Hands on Labs"' > $TEMP_DIR/src/references/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/references/mkdocs.yml
-          chmod -R 777 $TEMP_DIR/src/references
-          docker run --rm -v $TEMP_DIR/src/references:/docs --entrypoint /bin/sh ${{ secrets.MKDOCS_REPO_NAME }} -c "git config --global --add safe.directory /docs/docs && mkdocs build -d site/"
+          docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/references:/docs ${{ secrets.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/references/site $TEMP_DIR/build/site/references
 
       - name: Copy Workdir to TEMP_DIR
