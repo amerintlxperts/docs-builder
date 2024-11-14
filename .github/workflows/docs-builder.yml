@@ -180,14 +180,14 @@ jobs:
         id: create-temp-dir
         run: |
           TEMP_DIR=$(mktemp -d -p "${RUNNER_WORKSPACE}/docs-builder")
-          mkdir -p "$TEMP_DIR"
-          chmod -R 777 ${{ env.TEMP_DIR }}
           echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
-          mkdir -p $TEMP_DIR/build/
-          mkdir -p $TEMP_DIR/src/cloud
-          mkdir -p $TEMP_DIR/src/ot
-          mkdir -p $TEMP_DIR/src/secops
-          mkdir -p $TEMP_DIR/src/sase
+          mkdir -p ${{ env.TEMP_DIR }}
+          chmod -R 777 ${{ env.TEMP_DIR }}
+          mkdir -p ${{ env.TEMP_DIR }}/build/
+          mkdir -p ${{ env.TEMP_DIR }}/src/cloud
+          mkdir -p ${{ env.TEMP_DIR }}/src/ot
+          mkdir -p ${{ env.TEMP_DIR }}/src/secops
+          mkdir -p ${{ env.TEMP_DIR }}/src/sase
 
       - name: Mark TEMP_DIR as a safe Git directory
         run: |
