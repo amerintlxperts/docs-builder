@@ -188,6 +188,10 @@ jobs:
           mkdir -p $TEMP_DIR/src/secops
           mkdir -p $TEMP_DIR/src/sase
 
+      - name: Mark TEMP_DIR as a safe Git directory
+        run: |
+          git config --global --add safe.directory ${{ env.TEMP_DIR }}
+
       - name: Clone Landing Page
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
         with:
