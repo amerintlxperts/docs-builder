@@ -52,13 +52,13 @@ jobs:
     outputs:
       new_version: ${{ steps.set_version.outputs.new_version }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+#      - name: Checkout Repository
+#        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
 
-      - name: Fetch Version Branch
-        run: |
-          git fetch origin version || git checkout -b version
-          git checkout version || git checkout -b version
+#      - name: Fetch Version Branch
+#        run: |
+#          git fetch origin version || git checkout -b version
+#          git checkout version || git checkout -b version
 
       - name: Microsoft Azure Authentication
         uses: azure/login@a65d910e8af852a8061c627c456678983e180302
@@ -73,19 +73,34 @@ jobs:
           username: ${{ secrets.ARM_CLIENT_ID }}
           password: ${{ secrets.ARM_CLIENT_SECRET }}
 
-      - name: Check if VERSION file exists
+#      - name: Check if VERSION file exists
+#        id: version
+#        run: |
+#          # Check if VERSION file exists
+#          if [ -f VERSION ]; then
+#            VERSION=$(cat VERSION)
+#            IFS='.' read -r major minor patch <<< "$VERSION"
+#            LATEST_VERSION="${major}.${minor}.${patch}"
+#            ((patch++))
+#            NEW_VERSION="${major}.${minor}.${patch}"
+#          else
+#            LATEST_VERSION="0.0.0"
+#            NEW_VERSION="0.0.0"
+#          fi
+#          echo "latest_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Read VERSION variable
         id: version
         run: |
-          # Check if VERSION file exists
-          if [ -f VERSION ]; then
-            VERSION=$(cat VERSION)
+          if [ -z "${{ vars.VERSION }}" ]; then
+            LATEST_VERSION=0.0.0
+            NEW_VERSION="0.0.0"
+          else
+            VERSION="${{ vars.VERSION }}"
             IFS='.' read -r major minor patch <<< "$VERSION"
             LATEST_VERSION="${major}.${minor}.${patch}"
             ((patch++))
             NEW_VERSION="${major}.${minor}.${patch}"
-          else
-            LATEST_VERSION="0.0.0"
-            NEW_VERSION="0.0.0"
           fi
           echo "latest_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
@@ -305,36 +320,36 @@ jobs:
     env:
       new_version: ${{ needs.increment-version.outputs.new_version }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
-
-      - name: Setup Git Configuration
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Fetch Version Branch or Create It
-        run: |
-          git fetch origin
-          if git show-ref --quiet refs/remotes/origin/version; then
-            git checkout -B version origin/version
-          else
-            git checkout -b version
-          fi
-
-      - name: Update VERSION File
-        run: |
-          echo "${{ env.new_version }}" > VERSION
-
-      - name: Commit and Push Changes
-        run: |
-          git add VERSION
-          if git diff-index --quiet HEAD --; then
-            echo "No changes to commit"
-          else
-            git commit -m "Increment version to ${{ env.new_version }}"
-            git push -u origin version --force-with-lease  # Force push but only if remote hasn't changed
-          fi
+#      - name: Checkout Repository
+#        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+#
+#      - name: Setup Git Configuration
+#        run: |
+#          git config --global user.name "github-actions[bot]"
+#          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+#
+#      - name: Fetch Version Branch or Create It
+#        run: |
+#          git fetch origin
+#          if git show-ref --quiet refs/remotes/origin/version; then
+#            git checkout -B version origin/version
+#          else
+#            git checkout -b version
+#          fi
+#
+#      - name: Update VERSION File
+#        run: |
+#          echo "${{ env.new_version }}" > VERSION
+#
+#      - name: Commit and Push Changes
+#        run: |
+#          git add VERSION
+#          if git diff-index --quiet HEAD --; then
+#            echo "No changes to commit"
+#          else
+#            git commit -m "Increment version to ${{ env.new_version }}"
+#            git push -u origin version --force-with-lease  # Force push but only if remote hasn't changed
+#          fi
 
       - name: Set VERSION variable 
         uses: action-pack/set-variable@c745021a3a403ab9cc351b4aabe3e528f22d9937
