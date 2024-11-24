@@ -305,6 +305,14 @@ jobs:
           value: "${{ env.new_version }}"
           token: ${{ secrets.PAT }}
 
+      - name: Set VERSION variable 
+        uses: action-pack/set-variable@c745021a3a403ab9cc351b4aabe3e528f22d9937
+        with:
+          name: 'DOCS_VERSION'
+          value: "${{ env.new_version }}"
+          token: ${{ secrets.PAT }}
+          repository: ${{ vars.MANIFESTS_APPLICATIONS_REPO_NAME }}
+
   dispatch-manifest-update:
     name: Dispatch Manifest Update
     needs: [init, increment-version, build, update-version-branch]
