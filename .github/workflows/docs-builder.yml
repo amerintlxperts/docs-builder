@@ -326,12 +326,4 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           repository: ${{ github.repository_owner }}/${{ vars.MANIFESTS_APPLICATIONS_REPO_NAME }}
-          event-type: update-manifest
-          client-payload: |-
-            {
-              "type": "applications",
-              "name": "docs",
-              "file": "Deployment.yaml",
-              "spec": ".spec.template.spec.containers[0].image",
-              "value": "${{ secrets.ACR_LOGIN_SERVER }}/docs:${{ env.new_version }}"
-            }
+          event-type: docs-version
