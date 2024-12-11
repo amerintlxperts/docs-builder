@@ -22,7 +22,7 @@ jobs:
 
   init:
     name: Job Init
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       action: ${{ steps.init.outputs.action }}
     steps:
@@ -48,7 +48,7 @@ jobs:
     name: Increment Version
     if: needs.init.outputs.action == 'build'
     needs: [init]
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       new_version: ${{ steps.set_version.outputs.new_version }}
     steps:
@@ -141,7 +141,7 @@ jobs:
   build:
     name: Build and Push Container
     if: success()
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [increment-version, init]
     env:
       new_version: ${{ needs.increment-version.outputs.new_version }}
@@ -292,7 +292,7 @@ jobs:
   update-version-branch:
     name: Update Version Branch
     needs: [init, increment-version, build]
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: success()
     env:
       new_version: ${{ needs.increment-version.outputs.new_version }}
@@ -316,7 +316,7 @@ jobs:
   dispatch-manifest-update:
     name: Dispatch Manifest Update
     needs: [init, increment-version, build, update-version-branch]
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: success()
     env:
       new_version: ${{ needs.increment-version.outputs.new_version }}
