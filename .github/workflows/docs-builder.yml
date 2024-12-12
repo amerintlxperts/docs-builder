@@ -243,9 +243,8 @@ jobs:
       - name: Clone Content Repos
         shell: bash
         run: |
-          echo '# Hands on Labs' > $TEMP_DIR/src/cloud/docs/index.md
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/cloud/docs/
-          echo 'site_name: "Hands on Labs"' > $TEMP_DIR/src/cloud/mkdocs.yml
+          echo 'site_name: "Cloud Hands on Labs"' > $TEMP_DIR/src/cloud/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/mkdocs.yml
           docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/cloud:/docs ${{ vars.MKDOCS_REPO_NAME }} build -v -c -d site/
           mv $TEMP_DIR/src/cloud/site $TEMP_DIR/build/site/cloud
