@@ -315,7 +315,7 @@ jobs:
   dispatch-manifest-update:
     name: Dispatch Manifest Update
     needs: [init, increment-version, build, update-version-branch]
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     if: success()
     env:
       new_version: ${{ needs.increment-version.outputs.new_version }}
