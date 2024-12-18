@@ -291,7 +291,7 @@ jobs:
   update-version-branch:
     name: Update Version Branch
     needs: [init, increment-version, build]
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     if: success()
     env:
       new_version: ${{ needs.increment-version.outputs.new_version }}
