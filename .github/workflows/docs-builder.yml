@@ -22,7 +22,7 @@ jobs:
 
   init:
     name: Job Init
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     outputs:
       action: ${{ steps.init.outputs.action }}
     steps:
@@ -48,7 +48,7 @@ jobs:
     name: Increment Version
     if: needs.init.outputs.action == 'build'
     needs: [init]
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     outputs:
       new_version: ${{ steps.set_version.outputs.new_version }}
     steps:
@@ -141,7 +141,7 @@ jobs:
   build:
     name: Build and Push Container
     if: success()
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: [increment-version, init]
     env:
       new_version: ${{ needs.increment-version.outputs.new_version }}
