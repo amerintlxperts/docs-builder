@@ -257,6 +257,7 @@ jobs:
 
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/secops/docs/
           echo 'site_name: "SecOps Hands on Labs"' > $TEMP_DIR/src/secops/mkdocs.yml
+          echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/secops/mkdocs.yml
           echo 'nav:'  >> $TEMP_DIR/src/secops/mkdocs.yml
           echo '  - "Security Operations": index.md' >> $TEMP_DIR/src/secops/mkdocs.yml
           echo '  - Agenda: agenda.md' >> $TEMP_DIR/src/secops/mkdocs.yml
