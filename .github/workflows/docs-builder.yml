@@ -244,18 +244,21 @@ jobs:
         shell: bash
         run: |
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/cloud/docs/
+          cp $TEMP_DIR/src/cloud/docs/theme/partials/tabs-cloud.html $TEMP_DIR/src/cloud/docs/theme/partials/tabs.html
           echo 'site_name: "Cloud Hands on Labs"' > $TEMP_DIR/src/cloud/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/mkdocs.yml
           docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/cloud:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/cloud/site $TEMP_DIR/build/site/cloud
 
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/ot/docs/
+          cp $TEMP_DIR/src/ot/docs/theme/partials/tabs-ot.html $TEMP_DIR/src/ot/docs/theme/partials/tabs.html
           echo 'site_name: "OT Hands on Labs"' > $TEMP_DIR/src/ot/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/ot/mkdocs.yml
           docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/ot:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/ot/site $TEMP_DIR/build/site/ot
 
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/secops/docs/
+          cp $TEMP_DIR/src/secops/docs/theme/partials/tabs-secops.html $TEMP_DIR/src/secops/docs/theme/partials/tabs.html
           echo 'site_name: "SecOps Hands on Labs"' > $TEMP_DIR/src/secops/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/secops/mkdocs.yml
           # echo 'nav:'  >> $TEMP_DIR/src/secops/mkdocs.yml
@@ -265,6 +268,7 @@ jobs:
           mv $TEMP_DIR/src/secops/site $TEMP_DIR/build/site/secops
 
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/sase/docs/
+          cp $TEMP_DIR/src/sase/docs/theme/partials/tabs-sase.html $TEMP_DIR/src/sase/docs/theme/partials/tabs.html
           echo 'site_name: "SASE Hands on Labs"' > $TEMP_DIR/src/sase/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/sase/mkdocs.yml
           docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/sase:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
