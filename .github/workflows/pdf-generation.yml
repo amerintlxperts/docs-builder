@@ -25,9 +25,17 @@ jobs:
         done
 
     # 3. Install MkDocs and Dependencies
-    - name: Install MkDocs
+    - name: Install MkDocs and Plugins
       run: |
-        pip install mkdocs mkdocs-material mkdocs-exclude mkdocs-pdf-export-plugin
+        pip install \
+        mkdocs \
+        mkdocs-material \
+        mkdocs-exclude \
+        mkdocs-awesome-pages-plugin \
+        mkdocs-glightbox \
+        mkdocs-gh-admonitions \
+        mkdocs-literate-nav
+
 
     - name: Install wkhtmltopdf
       run: sudo apt-get update && sudo apt-get install -y wkhtmltopdf
