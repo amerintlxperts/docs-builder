@@ -9,7 +9,7 @@ jobs:
 
     steps:
     # 1. Check out the control repository (docs-builder)
-    - name: Checkout docs-builder
+    - name: Checkout Control Repo
       uses: actions/checkout@v3
 
     # 2. Clone Required Repositories
@@ -17,13 +17,12 @@ jobs:
       run: |
         mkdir -p $GITHUB_WORKSPACE/localrender
         cd $GITHUB_WORKSPACE
-        git clone git@github.com:amerintlxperts/mkdocs.git
-        git clone git@github.com:amerintlxperts/theme.git
-        git clone git@github.com:amerintlxperts/secops.git
-        git clone git@github.com:amerintlxperts/cloud.git
-        git clone git@github.com:amerintlxperts/ot.git
-        git clone git@github.com:amerintlxperts/sase.git
-        git clone git@github.com:amerintlxperts/landing-page.git
+
+        # Clone repositories dynamically
+        REPOS=("mkdocs" "theme" "secops" "cloud" "ot" "sase" "landing-page")
+        for REPO in "${REPOS[@]}"; do
+          git clone https://${{ secrets.PAT }}@github.com/${{ github.repository_owner }}/$REPO.git $REPO
+        done
 
     # 3. Install MkDocs and Dependencies
     - name: Install MkDocs
