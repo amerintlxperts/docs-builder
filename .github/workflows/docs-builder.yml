@@ -146,7 +146,7 @@ jobs:
     env:
       new_version: ${{ needs.increment-version.outputs.new_version }}
     steps:
-      - name: Checkout Repository
+      - name: Clone Repo
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
 
       - name: Microsoft Azure Authentication
@@ -163,7 +163,7 @@ jobs:
           password: ${{ secrets.ARM_CLIENT_SECRET }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349
+        uses: docker/setup-buildx-action@6524bf65af31da8d45b59e8c27de4bd072b392f5
 
       - name: Create Temporary Directory
         id: create-temp-dir
@@ -184,6 +184,7 @@ jobs:
           repository: ${{ github.repository_owner }}/landing-page
           token: ${{ secrets.PAT }} 
           path: ${{ env.TEMP_DIR }}/landing-page/docs
+          fetch-depth: 0
 
       - name: Link mkdocs.yml
         shell: bash
@@ -198,7 +199,7 @@ jobs:
           token: ${{ secrets.PAT }} 
           path: ${{ env.TEMP_DIR }}/landing-page/docs/theme
 
-      - name: Build Docs
+      - name: Build Landing Page
         shell: bash
         run: |
           docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/landing-page:/docs ${{ vars.MKDOCS_REPO_NAME }} build -v -c -d site/
@@ -210,6 +211,7 @@ jobs:
           repository: ${{ github.repository_owner }}/cloud
           token: ${{ secrets.PAT }} 
           path: ${{ env.TEMP_DIR }}/src/cloud/docs
+          fetch-depth: 0
 
       - name: Clone ot
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
@@ -217,6 +219,7 @@ jobs:
           repository: ${{ github.repository_owner }}/ot
           token: ${{ secrets.PAT }} 
           path: ${{ env.TEMP_DIR }}/src/ot/docs
+          fetch-depth: 0
 
       - name: Clone secops
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
@@ -224,6 +227,7 @@ jobs:
           repository: ${{ github.repository_owner }}/secops
           token: ${{ secrets.PAT }} 
           path: ${{ env.TEMP_DIR }}/src/secops/docs
+          fetch-depth: 0
 
       - name: Clone sase
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
@@ -231,6 +235,7 @@ jobs:
           repository: ${{ github.repository_owner }}/sase
           token: ${{ secrets.PAT }} 
           path: ${{ env.TEMP_DIR }}/src/sase/docs
+          fetch-depth: 0
 
       # - name: Clone references
       #   uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
@@ -240,7 +245,7 @@ jobs:
       #     path: ${{ env.TEMP_DIR }}/src/references/docs
 
 
-      - name: Clone Content Repos
+      - name: Build HTML
         shell: bash
         run: |
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/cloud/docs/
@@ -261,9 +266,6 @@ jobs:
           cp $TEMP_DIR/src/secops/docs/theme/partials/tabs-secops.html $TEMP_DIR/src/secops/docs/theme/partials/tabs.html
           echo 'site_name: "SecOps Hands on Labs"' > $TEMP_DIR/src/secops/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/secops/mkdocs.yml
-          # echo 'nav:'  >> $TEMP_DIR/src/secops/mkdocs.yml
-          # echo '  - "Security Operations": index.md' >> $TEMP_DIR/src/secops/mkdocs.yml
-          # echo '  - Agenda: agenda.md' >> $TEMP_DIR/src/secops/mkdocs.yml
           docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/secops:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/secops/site $TEMP_DIR/build/site/secops
 
