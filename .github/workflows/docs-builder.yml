@@ -252,30 +252,6 @@ jobs:
           cp $TEMP_DIR/src/cloud/docs/theme/partials/tabs-cloud.html $TEMP_DIR/src/cloud/docs/theme/partials/tabs.html
           echo 'site_name: "Cloud Hands on Labs"' > $TEMP_DIR/src/cloud/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo 'nav:' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '  - Home: index.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '  - FortiCNAPP:' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - FAQ: FortiCNAPP/FAQ.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Index: FortiCNAPP/index.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '  - FortiGate-CNF:' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Introduction: FortiGate-CNF/00-introduction.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Workshop Prerequisites: FortiGate-CNF/01-workshop-prerequisites.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Workshop Hands-On: FortiGate-CNF/02-workshop-hands-on.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Workshop Traffic Testing: FortiGate-CNF/03-workshop-traffic-testing.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Extra Credit: FortiGate-CNF/04-extra-credit.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Index: FortiGate-CNF/index.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '  - FortiWeb:' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Setup Requirements: FortiWeb/00-setup-requirements.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - How to Access Kali VNC: FortiWeb/01-how-to-access-kali-vnc.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - How to Access DVWA: FortiWeb/02-how-to-access-dvwa.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Bot Protection: FortiWeb/03-bot-protection.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Machine Learning API Protection: FortiWeb/04-machine-learning-api-protection.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Web Shell Detection: FortiWeb/05-web-shell-detection.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - CSRF Protection: FortiWeb/06-csrf-protection.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - User Tracking: FortiWeb/07-user-tracking.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Extra: FortiWeb/08-extra.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Web Protection Profile: FortiWeb/09-web-protection-profile.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          echo '    - Index: FortiWeb/index.md' >> $TEMP_DIR/src/cloud/mkdocs.yml
           docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/cloud:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/cloud/site $TEMP_DIR/build/site/cloud
 
