@@ -146,9 +146,6 @@ jobs:
     env:
       new_version: ${{ needs.increment-version.outputs.new_version }}
     steps:
-      # - name: Checkout Repository
-      #   uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
-
       - name: Microsoft Azure Authentication
         uses: azure/login@a65d910e8af852a8061c627c456678983e180302
         with:
@@ -266,9 +263,6 @@ jobs:
           cp $TEMP_DIR/src/secops/docs/theme/partials/tabs-secops.html $TEMP_DIR/src/secops/docs/theme/partials/tabs.html
           echo 'site_name: "SecOps Hands on Labs"' > $TEMP_DIR/src/secops/mkdocs.yml
           echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/secops/mkdocs.yml
-          # echo 'nav:'  >> $TEMP_DIR/src/secops/mkdocs.yml
-          # echo '  - "Security Operations": index.md' >> $TEMP_DIR/src/secops/mkdocs.yml
-          # echo '  - Agenda: agenda.md' >> $TEMP_DIR/src/secops/mkdocs.yml
           docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/secops:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/secops/site $TEMP_DIR/build/site/secops
 
