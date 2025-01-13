@@ -284,16 +284,24 @@ jobs:
 
       - name: Create PDF
         run: |
-          TARGET_DIR="$TEMP_DIR/src/cloud/docs/" 
-          find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type d ! -name "theme" | while read -r folder; do
-            folder_name=$(basename "$folder")
-            echo 'site_name: "${folder_name}"' > $TEMP_DIR/src/cloud/docs/mkdocs.yml
-            echo 'INHERIT: theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/docs/mkdocs.yml
-            cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/cloud/docs/
-            cp -a $TEMP_DIR/src/cloud/docs/${folder_name}/* $TEMP_DIR/src/cloud/docs/docs/
-            docker run --rm --user $(id -u):$(id -g) -e CUSTOM_DIR="theme" -e MKDOCS_EXPORTER_PDF_ENABLED="true" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud/docs/:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
-            mv $TEMP_DIR/src/cloud/docs/${folder_name}/site/document.pdf $TEMP_DIR/build/site/cloud/$folder_name/
-          done
+          echo 'site_name: "FortiWeb Hands on Labs"' > $TEMP_DIR/src/cloud/docs/FortiWeb/mkdocs.yml
+          echo 'INHERIT: theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/docs/FortiWeb/mkdocs.yml
+          cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/cloud/docs/FortiWeb/
+          docker run --rm --user $(id -u):$(id -g) -e CUSTOM_DIR="theme" -e MKDOCS_EXPORTER_PDF_ENABLED="true" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud/docs/FortiWeb:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
+          mv $TEMP_DIR/src/cloud/docs/FortiWeb/site/document.pdf $TEMP_DIR/build/site/cloud/FortiWeb/
+          
+#      - name: Create PDF
+#        run: |
+#          TARGET_DIR="$TEMP_DIR/src/cloud/docs/" 
+#          find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type d ! -name "theme" | while read -r folder; do
+#            folder_name=$(basename "$folder")
+#            echo 'site_name: "${folder_name}"' > $TEMP_DIR/src/cloud/docs/mkdocs.yml
+#            echo 'INHERIT: theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/docs/mkdocs.yml
+#            cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/cloud/docs/
+#            cp -a $TEMP_DIR/src/cloud/docs/${folder_name}/* $TEMP_DIR/src/cloud/docs/docs/
+#            docker run --rm --user $(id -u):$(id -g) -e CUSTOM_DIR="theme" -e MKDOCS_EXPORTER_PDF_ENABLED="true" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud/docs/:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
+#            mv $TEMP_DIR/src/cloud/docs/${folder_name}/site/document.pdf $TEMP_DIR/build/site/cloud/$folder_name/
+#          done
 
       - name: Copy Workdir to TEMP_DIR
         run: |
