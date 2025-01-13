@@ -282,6 +282,18 @@ jobs:
           # docker run --rm --user $(id -u):$(id -g) -v $TEMP_DIR/src/references:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           # mv $TEMP_DIR/src/references/site $TEMP_DIR/build/site/references
 
+      - name: Run ls -al for each subfolder
+        run: |
+          TARGET_DIR="$TEMP_DIR/src/cloud/docs/" 
+          find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type d ! -name "theme" | while read -r folder; do
+            cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/cloud/docs/${folder}
+            echo 'site_name: "${folder}"' > $TEMP_DIR/src/cloud/${folder}/mkdocs.yml
+            echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/${folder}/mkdocs.yml
+            docker run --rm --user $(id -u):$(id -g) -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud/${folder}:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
+
+            mv $TEMP_DIR/src/cloud/${folder}/site/document.pdf $TEMP_DIR/build/site/cloud/$folder/
+          done
+
       - name: Copy Workdir to TEMP_DIR
         run: |
           cp -a $GITHUB_WORKSPACE/Dockerfile $TEMP_DIR/build
