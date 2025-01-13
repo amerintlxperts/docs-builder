@@ -292,8 +292,7 @@ jobs:
             echo 'INHERIT: theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/docs/${folder_name}/mkdocs.yml
             ls -al $TEMP_DIR/src/cloud/docs/${folder_name}
             cp -a $TEMP_DIR/src/cloud/docs/${folder_name} $TEMP_DIR/src/cloud/docs/docs/
-              #docker run --rm --user $(id -u):$(id -g) -e CUSTOM_DIR="theme" -e MKDOCS_EXPORTER_PDF="true" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud/docs/${folder_name}:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
-            docker run --rm --user $(id -u):$(id -g) -e CUSTOM_DIR="theme" -e MKDOCS_EXPORTER_PDF="true" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud/docs/${folder_name}:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
+            docker run --rm --user $(id -u):$(id -g) -e CUSTOM_DIR="theme" -e MKDOCS_EXPORTER_PDF="true" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud/docs/:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
             mv $TEMP_DIR/src/cloud/docs/${folder_name}/site/document.pdf $TEMP_DIR/build/site/cloud/$folder_name/
           done
 
