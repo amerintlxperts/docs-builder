@@ -289,7 +289,7 @@ jobs:
           echo 'site_name: "FortiWeb Hands on Labs"' > $TEMP_DIR/src/cloud/docs/mkdocs.yml
           echo 'INHERIT: theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/docs/mkdocs.yml
           docker run --rm --user $(id -u):$(id -g) -e CUSTOM_DIR="theme" -e MKDOCS_EXPORTER_PDF_ENABLED="true" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud/docs/:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
-          mv $TEMP_DIR/src/cloud/docs/docs/site/document.pdf $TEMP_DIR/build/site/cloud/FortiWeb/
+          mv $TEMP_DIR/src/cloud/docs/site/document.pdf $TEMP_DIR/build/site/cloud/FortiWeb/
           
 #      - name: Create PDF
 #        run: |
