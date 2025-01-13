@@ -287,6 +287,8 @@ jobs:
           TARGET_DIR="$TEMP_DIR/src/cloud/docs/" 
           find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type d ! -name "theme" ! -name ".git" ! -name ".github" ! -name "images" | while read -r folder; do
             folder_name=$(basename "$folder")
+            echo $folder
+            echo $folder_name
             cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/cloud/docs/${folder_name}/
             mv $TEMP_DIR/src/cloud/docs/${folder_name}/ $TEMP_DIR/src/cloud/docs/docs
             echo 'site_name: "${folder_name} Hands on Labs"' > $TEMP_DIR/src/cloud/docs/mkdocs.yml
