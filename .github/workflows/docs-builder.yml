@@ -250,9 +250,7 @@ jobs:
         run: |
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/cloud/docs/
           cp $TEMP_DIR/src/cloud/docs/theme/partials/tabs-cloud.html $TEMP_DIR/src/cloud/docs/theme/partials/tabs.html
-          echo 'site_name: "Cloud Hands on Labs"' > $TEMP_DIR/src/cloud/mkdocs.yml
-          echo 'INHERIT: docs/theme/mkdocs.yml' >> $TEMP_DIR/src/cloud/mkdocs.yml
-          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
+          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_SITE_NAME="Cloud Hands on Labs" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/ -f docs/theme/mkdocs.yml
           mv $TEMP_DIR/src/cloud/site $TEMP_DIR/build/site/cloud
 
           cp -a $TEMP_DIR/landing-page/docs/theme $TEMP_DIR/src/ot/docs/
@@ -293,9 +291,11 @@ jobs:
               echo $folder_name
               cp -a $TEMP_DIR/landing-page/docs/theme "$TEMP_DIR/src/${target}/docs/${folder_name}/"
               mv "$TEMP_DIR/src/${target}/docs/${folder_name}/" "$TEMP_DIR/src/${target}/docs/docs"
-              echo "site_name: \"${folder_name} Hands on Labs\"" > "$TEMP_DIR/src/${target}/docs/mkdocs.yml"
               echo "INHERIT: theme/mkdocs.yml" >> "$TEMP_DIR/src/${target}/docs/mkdocs.yml"
+              NORMALIZED_NAME="${folder_name//-/ }"
+              NORMALIZED_NAME=$(echo "$NORMALIZED_NAME" | sed -E 's/\b(.)/\U\1/g')
               docker run --rm --user $(id -u):$(id -g) \
+                -e MKDOCS_SITE_NAME="${NORMALIZED_NAME}" \
                 -e CUSTOM_DIR="theme" \
                 -e MKDOCS_EXPORTER_PDF_ENABLED="true" \
                 -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" \
