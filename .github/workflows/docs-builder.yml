@@ -272,6 +272,7 @@ jobs:
               NORMALIZED_NAME="${folder_name//-/ }"
               NORMALIZED_NAME=$(echo "$NORMALIZED_NAME" | sed -E 's/\b(.)/\U\1/g')
               docker run --rm --user $(id -u):$(id -g) \
+                -e MKDOCS_PDF_FILENAME="${folder_name}.pdf" \
                 -e MKDOCS_SITE_NAME="${NORMALIZED_NAME}" \
                 -e CUSTOM_DIR="theme" \
                 -e MKDOCS_EXPORTER_PDF_ENABLED="true" \
