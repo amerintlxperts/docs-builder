@@ -280,7 +280,7 @@ jobs:
                 -v "$TEMP_DIR/src/${target}/docs/:/docs" \
                 ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
               rm -rf "$TEMP_DIR/src/${target}/docs/docs"
-              mv "$TEMP_DIR/src/${target}/docs/site/document.pdf" "$TEMP_DIR/build/site/${target}/${folder_name}/"
+              mv "$TEMP_DIR/src/${target}/docs/site/${folder_name}.pdf" "$TEMP_DIR/build/site/${target}/${folder_name}/"
             done
           done
 
