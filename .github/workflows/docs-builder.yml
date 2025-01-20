@@ -269,7 +269,7 @@ jobs:
               cp -a $TEMP_DIR/src/theme "$TEMP_DIR/src/${target}/docs/${folder_name}/"
               mkdir -p "$TEMP_DIR/src/${target}/docs/docs/foo"
               mv "$TEMP_DIR/src/${target}/docs/${folder_name}/" "$TEMP_DIR/src/${target}/docs/docs/foo"
-              echo "INHERIT: docs/theme/foo/mkdocs.yml" >> "$TEMP_DIR/src/${target}/docs/mkdocs.yml"
+              echo "INHERIT: docs/theme/mkdocs.yml" >> "$TEMP_DIR/src/${target}/docs/foo/mkdocs.yml"
               echo "" > "$TEMP_DIR/src/${target}/docs/docs/index.md"
               NORMALIZED_NAME="${folder_name//-/ }"
               NORMALIZED_NAME=$(echo "$NORMALIZED_NAME" | sed -E 's/\b(.)/\U\1/g')
