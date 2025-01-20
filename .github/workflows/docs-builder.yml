@@ -277,7 +277,7 @@ jobs:
                 -e CUSTOM_DIR="theme" \
                 -e MKDOCS_EXPORTER_PDF_ENABLED="true" \
                 -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" \
-                -v "$TEMP_DIR/src/${target}/docs/:/docs" \
+                -v "$TEMP_DIR/src/${target}/docs/foo/:/docs" \
                 ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
               rm -rf "$TEMP_DIR/src/${target}/docs/docs"
               mv "$TEMP_DIR/src/${target}/docs/site/${folder_name}.pdf" "$TEMP_DIR/build/site/${target}/${folder_name}/"
