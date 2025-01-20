@@ -267,10 +267,8 @@ jobs:
               echo $folder
               echo $folder_name
               cp -a $TEMP_DIR/src/theme "$TEMP_DIR/src/${target}/docs/${folder_name}/"
-              mkdir -p "$TEMP_DIR/src/${target}/docs/docs/foo"
-              mv "$TEMP_DIR/src/${target}/docs/${folder_name}/" "$TEMP_DIR/src/${target}/docs/docs/foo"
-              echo "INHERIT: docs/theme/mkdocs.yml" >> "$TEMP_DIR/src/${target}/docs/foo/mkdocs.yml"
-              echo "" > "$TEMP_DIR/src/${target}/docs/docs/index.md"
+              mv "$TEMP_DIR/src/${target}/docs/${folder_name}/" "$TEMP_DIR/src/${target}/docs/docs"
+              echo "INHERIT: docs/theme/mkdocs.yml" >> "$TEMP_DIR/src/${target}/docs/mkdocs.yml"
               NORMALIZED_NAME="${folder_name//-/ }"
               NORMALIZED_NAME=$(echo "$NORMALIZED_NAME" | sed -E 's/\b(.)/\U\1/g')
               docker run --rm --user $(id -u):$(id -g) \
@@ -279,7 +277,7 @@ jobs:
                 -e CUSTOM_DIR="theme" \
                 -e MKDOCS_EXPORTER_PDF_ENABLED="true" \
                 -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" \
-                -v "$TEMP_DIR/src/${target}/docs/foo/:/docs" \
+                -v "$TEMP_DIR/src/${target}/docs/:/docs" \
                 ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
               rm -rf "$TEMP_DIR/src/${target}/docs/docs"
               mv "$TEMP_DIR/src/${target}/docs/site/${folder_name}.pdf" "$TEMP_DIR/build/site/${target}/${folder_name}/"
