@@ -230,31 +230,31 @@ jobs:
         run: |
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/landing-page/docs/
           echo "INHERIT: docs/theme/mkdocs.yml" >> "$TEMP_DIR/src/landing-page/mkdocs.yml"
-          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_SITE_NAME="Hands on Labs" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -v $TEMP_DIR/src/landing-page:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
+          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="Hands on Labs" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -v $TEMP_DIR/src/landing-page:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/landing-page/site $TEMP_DIR/build/
 
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/cloud/docs/
           mv $TEMP_DIR/src/cloud/docs/theme/partials/tabs-cloud.html $TEMP_DIR/src/cloud/docs/theme/partials/tabs.html
           echo "INHERIT: docs/theme/mkdocs.yml" >> "$TEMP_DIR/src/cloud/mkdocs.yml"
-          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_SITE_NAME="Cloud Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/cloud/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
+          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="Cloud Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/cloud/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/cloud/site $TEMP_DIR/build/site/cloud
 
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/ot/docs/
           mv $TEMP_DIR/src/ot/docs/theme/partials/tabs-ot.html $TEMP_DIR/src/ot/docs/theme/partials/tabs.html
           echo "INHERIT: docs/theme/mkdocs.yml" >> "$TEMP_DIR/src/ot/mkdocs.yml"
-          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_SITE_NAME="OT Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/ot/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/ot:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
+          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="OT Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/ot/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/ot:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/ot/site $TEMP_DIR/build/site/ot
 
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/secops/docs/
           mv $TEMP_DIR/src/secops/docs/theme/partials/tabs-secops.html $TEMP_DIR/src/secops/docs/theme/partials/tabs.html
           echo "INHERIT: docs/theme/mkdocs.yml" >> "$TEMP_DIR/src/secops/mkdocs.yml"
-          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_SITE_NAME="SecOps Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/secops/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/secops:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
+          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="SecOps Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/secops/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/secops:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/secops/site $TEMP_DIR/build/site/secops
 
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/sase/docs/
           mv $TEMP_DIR/src/sase/docs/theme/partials/tabs-sase.html $TEMP_DIR/src/sase/docs/theme/partials/tabs.html
           echo "INHERIT: docs/theme/mkdocs.yml" >> "$TEMP_DIR/src/sase/mkdocs.yml"
-          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_SITE_NAME="SASE Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/sase/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/sase:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
+          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="SASE Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/sase/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/sase:/docs ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
           mv $TEMP_DIR/src/sase/site $TEMP_DIR/build/site/sase
 
       - name: Create PDF
@@ -272,6 +272,7 @@ jobs:
               NORMALIZED_NAME="${folder_name//-/ }"
               NORMALIZED_NAME=$(echo "$NORMALIZED_NAME" | sed -E 's/\b(.)/\U\1/g')
               docker run --rm --user $(id -u):$(id -g) \
+                -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" \
                 -e MKDOCS_PDF_FILENAME="${folder_name}.pdf" \
                 -e MKDOCS_SITE_NAME="${NORMALIZED_NAME}" \
                 -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/${target}/" \
