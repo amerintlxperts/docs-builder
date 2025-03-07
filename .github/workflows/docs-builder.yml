@@ -234,22 +234,22 @@ jobs:
           mv $TEMP_DIR/site $TEMP_DIR/build/
 
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/cloud/
-          mv $TEMP_DIR/src/cloud/docs/theme/partials/tabs-cloud.html $TEMP_DIR/src/cloud/docs/theme/partials/tabs.html
+          mv $TEMP_DIR/src/cloud/theme/partials/tabs-cloud.html $TEMP_DIR/src/cloud/theme/partials/tabs.html
           docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="Cloud Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/cloud/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/cloud:/tmp/docs -v $TEMP_DIR/site/:/tmp/site/ ${{ vars.MKDOCS_REPO_NAME }} build -c
           mv $TEMP_DIR/site $TEMP_DIR/build/site/cloud
 
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/ot/
-          mv $TEMP_DIR/src/ot/docs/theme/partials/tabs-ot.html $TEMP_DIR/src/ot/docs/theme/partials/tabs.html
+          mv $TEMP_DIR/src/ot/theme/partials/tabs-ot.html $TEMP_DIR/src/ot/theme/partials/tabs.html
           docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="OT Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/ot/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/ot:/tmp/docs -v $TEMP_DIR/site/:/tmp/site/ ${{ vars.MKDOCS_REPO_NAME }} build -c
           mv $TEMP_DIR/site $TEMP_DIR/build/site/ot
 
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/secops/
-          mv $TEMP_DIR/src/secops/docs/theme/partials/tabs-secops.html $TEMP_DIR/src/secops/docs/theme/partials/tabs.html
+          mv $TEMP_DIR/src/secops/theme/partials/tabs-secops.html $TEMP_DIR/src/secops/theme/partials/tabs.html
           docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="SecOps Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/secops/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/secops:/tmp/docs -v $TEMP_DIR/site/:/tmp/site/ ${{ vars.MKDOCS_REPO_NAME }} build -c
           mv $TEMP_DIR/site $TEMP_DIR/build/site/secops
 
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/sase/
-          mv $TEMP_DIR/src/sase/docs/theme/partials/tabs-sase.html $TEMP_DIR/src/sase/docs/theme/partials/tabs.html
+          mv $TEMP_DIR/src/sase/theme/partials/tabs-sase.html $TEMP_DIR/src/sase/theme/partials/tabs.html
           docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="SASE Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/sase/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/sase:/tmp/docs -v $TEMP_DIR/site/:/tmp/site/ ${{ vars.MKDOCS_REPO_NAME }} build -c
           mv $TEMP_DIR/site $TEMP_DIR/build/site/sase
 
