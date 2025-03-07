@@ -257,14 +257,11 @@ jobs:
         run: |
           TARGET_DIRS=("cloud" "ot" "secops" "sase")
           for target in "${TARGET_DIRS[@]}"; do
-            TARGET_DIR="$TEMP_DIR/src/${target}/docs/"
+            TARGET_DIR="$TEMP_DIR/src/${target}/"
             find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type d ! -name ".vscode" ! -name "theme" ! -name ".git" ! -name ".github" ! -name "images" | while read -r folder; do
               folder_name=$(basename "$folder")
-              echo $folder
-              echo $folder_name
-              cp -a $TEMP_DIR/src/theme "$TEMP_DIR/src/${target}/docs/${folder_name}/"
-              mv "$TEMP_DIR/src/${target}/docs/${folder_name}/" "$TEMP_DIR/src/${target}/docs/docs"
-              echo "INHERIT: docs/theme/mkdocs.yml" >> "$TEMP_DIR/src/${target}/docs/mkdocs.yml"
+              cp -a $TEMP_DIR/src/theme "$TEMP_DIR/src/${target}/${folder_name}/"
+              mv "$TEMP_DIR/src/${target}/${folder_name}/" "$TEMP_DIR/src/${target}/docs/"
               NORMALIZED_NAME="${folder_name//-/ }"
               NORMALIZED_NAME=$(echo "$NORMALIZED_NAME" | sed -E 's/\b(.)/\U\1/g')
               docker run --rm --user $(id -u):$(id -g) \
@@ -275,10 +272,10 @@ jobs:
                 -e CUSTOM_DIR="theme" \
                 -e MKDOCS_EXPORTER_PDF_ENABLED="true" \
                 -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" \
-                -v "$TEMP_DIR/src/${target}/docs/:/docs" \
-                ${{ vars.MKDOCS_REPO_NAME }} build -c -d site/
-              rm -rf "$TEMP_DIR/src/${target}/docs/docs"
-              mv "$TEMP_DIR/src/${target}/docs/site/${folder_name}.pdf" "$TEMP_DIR/build/site/${target}/${folder_name}/"
+                -v "$TEMP_DIR/src/${target}/${folder_name}:/tmp/docs" \
+                -v "$TEMP_DIR/site:/tmp/site" \
+                ${{ vars.MKDOCS_REPO_NAME }} build -c
+              mv "$TEMP_DIR/site/${folder_name}.pdf" "$TEMP_DIR/build/site/${target}/${folder_name}/"
             done
           done
 
