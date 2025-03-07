@@ -171,11 +171,11 @@ jobs:
           TEMP_DIR=$(mktemp -d -p "${RUNNER_WORKSPACE}/docs-builder")
           echo "TEMP_DIR=$TEMP_DIR" >> $GITHUB_ENV
           mkdir -p $TEMP_DIR
-          mkdir -p $TEMP_DIR/build/
           mkdir -p $TEMP_DIR/src/cloud
           mkdir -p $TEMP_DIR/src/ot
           mkdir -p $TEMP_DIR/src/secops
           mkdir -p $TEMP_DIR/src/sase
+          mkdir -p $TEMP_DIR/build/
           mkdir -p $TEMP_DIR/site
           chmod -R 777 $TEMP_DIR
 
@@ -230,8 +230,8 @@ jobs:
         shell: bash
         run: |
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/landing-page/
-          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="Hands on Labs" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -v $TEMP_DIR/src/landing-page:/tmp/docs -v $TEMP_DIR/site/:/tmp/site/ ${{ vars.MKDOCS_REPO_NAME }} build
-          mv $TEMP_DIR/site $TEMP_DIR/build/
+          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="Hands on Labs" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -v $TEMP_DIR/src/landing-page:/tmp/docs -v $TEMP_DIR/site/:/tmp/site/ ${{ vars.MKDOCS_REPO_NAME }} build -d /tmp/site/rendered
+          mv $TEMP_DIR/site/rendered $TEMP_DIR/build/
 
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/cloud/
           mv $TEMP_DIR/src/cloud/theme/partials/tabs-cloud.html $TEMP_DIR/src/cloud/theme/partials/tabs.html
