@@ -268,7 +268,6 @@ jobs:
                 -e MKDOCS_PDF_FILENAME="${folder_name}.pdf" \
                 -e MKDOCS_SITE_NAME="${NORMALIZED_NAME}" \
                 -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/${target}/" \
-                -e CUSTOM_DIR="theme" \
                 -e MKDOCS_EXPORTER_PDF_ENABLED="true" \
                 -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" \
                 -v "$TEMP_DIR/src/${target}/${folder_name}:/tmp/docs" \
