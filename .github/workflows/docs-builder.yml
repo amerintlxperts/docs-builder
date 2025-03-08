@@ -229,6 +229,7 @@ jobs:
       - name: Build HTML
         shell: bash
         run: |
+          chmod 777 $TEMP_DIR/site/
           cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/landing-page/
           docker run --rm --user $(id -u):$(id -g) -e MKDOCS_SITE_DIR="site/rendered" -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="Hands on Labs" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -v $TEMP_DIR/src/landing-page:/tmp/docs -v $TEMP_DIR/site/:/tmp/site/ ${{ vars.MKDOCS_REPO_NAME }} build
           mv $TEMP_DIR/site/rendered/ $TEMP_DIR/build/site
