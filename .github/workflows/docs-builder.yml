@@ -268,7 +268,7 @@ jobs:
 
       - name: Create PDF
         run: |
-          TARGET_DIRS=("cloud" "ot" "secops" "sase")
+          TARGET_DIRS=("cloud" "ot" "secops" "sase" "lanedge")
           for target in "${TARGET_DIRS[@]}"; do
             TARGET_DIR="$TEMP_DIR/src/${target}/"
             find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type d ! -name ".vscode" ! -name "theme" ! -name ".git" ! -name ".github" ! -name "images" | while read -r folder; do
