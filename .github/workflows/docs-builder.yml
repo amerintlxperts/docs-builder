@@ -226,6 +226,14 @@ jobs:
           path: ${{ env.TEMP_DIR }}/src/sase
           fetch-depth: 0
 
+      - name: Clone lanedge
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
+        with:
+          repository: ${{ github.repository_owner }}/lanedge
+          token: ${{ secrets.PAT }} 
+          path: ${{ env.TEMP_DIR }}/src/lanedge
+          fetch-depth: 0
+
       - name: Build HTML
         shell: bash
         run: |
@@ -253,9 +261,14 @@ jobs:
           docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="SASE Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/sase/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/sase:/tmp/docs -v $TEMP_DIR/site/:/tmp/site/ ${{ vars.MKDOCS_REPO_NAME }} build -c
           mv $TEMP_DIR/site/rendered $TEMP_DIR/build/site/sase
 
+          cp -a $TEMP_DIR/src/theme $TEMP_DIR/src/lanedge/
+          mv $TEMP_DIR/src/lanedge/theme/partials/tabs-lanedge.html $TEMP_DIR/src/lanedge/theme/partials/tabs.html
+          docker run --rm --user $(id -u):$(id -g) -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" -e MKDOCS_SITE_NAME="Lan Edge Hands on Labs" -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/lanedge/" -e MKDOCS_EXPORTER_PDF_ENABLED="false" -e PLAYWRIGHT_BROWSERS_PATH="/ms-playwright" -v $TEMP_DIR/src/lanedge:/tmp/docs -v $TEMP_DIR/site/:/tmp/site/ ${{ vars.MKDOCS_REPO_NAME }} build -c
+          mv $TEMP_DIR/site/rendered $TEMP_DIR/build/site/lanedge
+
       - name: Create PDF
         run: |
-          TARGET_DIRS=("cloud" "ot" "secops" "sase")
+          TARGET_DIRS=("cloud" "ot" "secops" "sase" "lanedge")
           for target in "${TARGET_DIRS[@]}"; do
             TARGET_DIR="$TEMP_DIR/src/${target}/"
             find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type d ! -name ".vscode" ! -name "theme" ! -name ".git" ! -name ".github" ! -name "images" | while read -r folder; do
