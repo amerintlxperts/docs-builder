@@ -221,7 +221,7 @@ jobs:
       - name: Clone sase
         uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871
         with:
-          repository: ${{ github.repository_owner }}/sase
+          repository: ${{ github.repository_owner }}/sase-halifax25
           token: ${{ secrets.PAT }} 
           path: ${{ env.TEMP_DIR }}/src/sase
           fetch-depth: 0
