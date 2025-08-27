@@ -278,7 +278,7 @@ jobs:
               NORMALIZED_NAME=$(echo "$NORMALIZED_NAME" | sed -E 's/\b(.)/\U\1/g')
               docker run --rm --user $(id -u):$(id -g) \
                 -e MKDOCS_HOMEPAGE="https://docs.${{ vars.DNS_ZONE }}" \
-                -e MKDOCS_PDF_FILENAME="${folder_name}.pdf" \
+                -e MKDOCS_PDF_FILENAME="xPerts_2025_Halifax_${target}_${folder_name}.pdf" \
                 -e MKDOCS_SITE_NAME="${NORMALIZED_NAME}" \
                 -e MKDOCS_SITE_URL="https://docs.${{ vars.DNS_ZONE }}/${target}/" \
                 -e MKDOCS_EXPORTER_PDF_ENABLED="true" \
@@ -286,7 +286,7 @@ jobs:
                 -v "$TEMP_DIR/src/${target}/${folder_name}:/tmp/docs" \
                 -v "$TEMP_DIR/site:/tmp/site" \
                 ${{ vars.MKDOCS_REPO_NAME }} build -c
-              mv "$TEMP_DIR/site/rendered/${folder_name}.pdf" "$TEMP_DIR/build/site/${target}/${folder_name}/"
+              mv "$TEMP_DIR/site/rendered/xPerts_2025_Halifax_${target}_${folder_name}.pdf" "$TEMP_DIR/build/site/${target}/${folder_name}/"
             done
           done
 
